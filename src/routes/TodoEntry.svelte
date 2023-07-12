@@ -1,16 +1,13 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import type { todoEntry } from '../stores/todoStore';
 
 	const dispatch = createEventDispatcher();
 
-	export let id: null | number = null;
-	export let contents = '';
-	let showRemoveButton = false;
-	let done = false;
+	export let id: number;
+	export let entry: todoEntry;
 
-	function removeButtonClicked() {
-		dispatch('removeButtonClicked', id);
-	}
+	let showRemoveButton = false;
 </script>
 
 <li
@@ -18,17 +15,21 @@
 	on:mouseenter={() => (showRemoveButton = true)}
 	on:mouseleave={() => (showRemoveButton = false)}
 >
-	<input class="checkbox checkbox-lg checkbox-success" type="checkbox" bind:checked={done} />
+	<input
+		class="checkbox checkbox-lg checkbox-success"
+		type="checkbox"
+		bind:checked={entry.done}
+	/>
 	<input
 		class="input input-bordered flex-1"
 		type="text"
-      disabled={done}
-		value={contents}
+		disabled={entry.done}
+		value={entry.text}
 	/>
 	{#if showRemoveButton}
 		<button
 			class="btn btn-sm btn-circle btn-outline btn-error text-xl"
-			on:click={removeButtonClicked}>✖</button
+			on:click={() => dispatch('removeButtonClicked', id)}>✖</button
 		>
 	{/if}
 </li>
