@@ -2,12 +2,9 @@
 	import '../app.css';
 </script>
 
-<main class="container mx-auto">
+<main class="container mx-auto my-6 max-w-md">
 	<slot />
 </main>
 
 <style>
-	main {
-		max-width: 40em;
-	}
 </style>
