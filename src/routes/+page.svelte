@@ -1,28 +1,60 @@
 <script lang="ts">
 	import TodoEntry from './TodoEntry.svelte';
-	import { todoEntries, addTodo, removeTodo, toggleTodo } from '../stores/todoStore';
+	import { onMount } from 'svelte';
+	import type { todoEntry } from './api/todo/+server';
 
+	let todos: todoEntry[] = [];
 
- function localAddTodo(e) {
-	 addTodo(e.target.children['new-todo-entry'].value)
-	 // clear the input field
- 	 e.target.children['new-todo-entry'].value = '';
- }
- function localRemoveTodo(e) {
-	 removeTodo(e.detail);
- }
- function localToggleTodo(e) {
-	 toggleTodo(e.detail.id, e.detail.state);
- }
+	onMount(() => {
+		loadTodos();
+	});
+	async function loadTodos() {
+		let response = await fetch('/api/todo');
+		// If they managed to add some very quickly before they loaded
+		todos = [...(await response.json()), ...todos];
+	}
+
+	function updateFetch(body: { action: string; value?: any; id?: number; state?: boolean }) {
+		fetch('/api/todo', {
+			method: 'POST',
+			body: JSON.stringify(body)
+		}).then((response) => {
+			response.json().then((response) => {
+				todos = response;
+			});
+		});
+	}
+
+	function localAddTodo(e: any) {
+		updateFetch({ action: 'add', value: e.target.children['new-todo-entry'].value });
+		// clear the input field
+		e.target.children['new-todo-entry'].value = '';
+	}
+	function localRemoveTodo(e: { detail: number }) {
+		updateFetch({ action: 'remove', id: e.detail });
+	}
+	function localToggleTodo(e: { detail: { id: number; state: boolean } }) {
+		updateFetch({ action: 'toggle', id: e.detail.id, state: e.detail.state });
+	}
 </script>
 
 <h1 class="text-3xl font-bold text-center my-6">Todo Demo</h1>
 
 <form class="flex my-4" on:submit|preventDefault={localAddTodo}>
-	<input class="input input-bordered flex-1" type="text" name="new-todo-entry" placeholder="What do you need to do?" />
+	<input
+		class="input input-bordered flex-1"
+		type="text"
+		name="new-todo-entry"
+		placeholder="What do you need to do?"
+	/>
 </form>
 <ol class="list-none">
-	{#each $todoEntries as entry, i}
-		<TodoEntry id={i} bind:entry={entry} on:removeButtonClicked={localRemoveTodo} on:checkboxToggled={localToggleTodo} />
+	{#each todos as entry, i}
+		<TodoEntry
+			id={i}
+			bind:entry
+			on:removeButtonClicked={localRemoveTodo}
+			on:checkboxToggled={localToggleTodo}
+		/>
 	{/each}
 </ol>
