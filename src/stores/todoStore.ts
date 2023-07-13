@@ -18,3 +18,7 @@ export function addTodo(newEntry: string) {
 export function removeTodo(index: number) {
   todoEntries.update((entries) => entries.filter((_, i) => i !== index));
 }
+
+export function toggleTodo(index: number, state: boolean) {
+  todoEntries.update((entries) => entries.map((value, i) => i === index ? { ...value, done: state } : value));
+}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import TodoEntry from './TodoEntry.svelte';
-	import { todoEntries, addTodo, removeTodo } from '../stores/todoStore';
+	import { todoEntries, addTodo, removeTodo, toggleTodo } from '../stores/todoStore';
 
 
  function localAddTodo(e) {
@@ -11,6 +11,9 @@
  function localRemoveTodo(e) {
 	 removeTodo(e.detail);
  }
+ function localToggleTodo(e) {
+	 toggleTodo(e.detail.id, e.detail.state);
+ }
 </script>
 
 <h1 class="text-3xl font-bold text-center my-6">Todo Demo</h1>
@@ -20,6 +23,6 @@
 </form>
 <ol class="list-none">
 	{#each $todoEntries as entry, i}
-		<TodoEntry id={i} bind:entry={entry} on:removeButtonClicked={localRemoveTodo} />
+		<TodoEntry id={i} bind:entry={entry} on:removeButtonClicked={localRemoveTodo} on:checkboxToggled={localToggleTodo} />
 	{/each}
 </ol>
