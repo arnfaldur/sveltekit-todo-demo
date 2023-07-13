@@ -49,9 +49,8 @@
 	/>
 </form>
 <ol class="list-none">
-	{#each todos as entry, i}
+	{#each todos as entry}
 		<TodoEntry
-			id={i}
 			bind:entry
 			on:removeButtonClicked={localRemoveTodo}
 			on:checkboxToggled={localToggleTodo}
