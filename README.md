@@ -1,38 +1,46 @@
-# create-svelte
+# SvelteKit Todo Demo
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+A simple todo list webapp. Made using SvelteKit, Tailwind CSS, daisyUI, and SQLite.
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Install the required depnendencies with the command `npm install` (or `pnpm install` or `yarn`).
+
+Then to start a development server run:
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
 ## Building
 
-To create a production version of your app:
+The production version is not significantly different to the development version.
+To build a production version of the app run:
 
 ```bash
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+And to host a server previewing it, run:
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+```bash
+npm run preview
+```
+
+## Design
+
+The application is based on the [`create-svelte`](https://www.npmjs.com/package/create-svelte) project scaffolding.
+I chose tailwind as I am familiar with vuetify which is based on it.
+Alongside tailwind, daisyUI reduced the number of design decisions that I had to make, helping me give the UI an simple and elegant look.
+
+The simplicity of the app meant that there wasn't need for much compartmentalization.
+There is only one component: TodoEntry. It manages the UI and behavior of each todo entry.
+
+SvelteKit provides tools to make separate serverside and clientside code, as well as tools to define API endpoints.
+As the data that is being sent back and forth is small, it is re-sent in it's entirety on each update.
+This is obviously inefficient but works well enough for the project and avoids potentially brittle state mirroring logic.
+
+NPM has a SQLite package that made it easy to set up database storage.
+Every user action immediately triggers a corresponding database update.
+In a larger project the load on the database could become too high.
+In that case an in-memory storage could be added as an intermediary which is then periodically flushed to the database.
