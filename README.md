@@ -4,6 +4,10 @@ A simple todo list webapp. Made using SvelteKit, Tailwind CSS, daisyUI, and SQLi
 
 ## Developing
 
+Make sure you have `node` and `npm` installed. I recommend `pnpm` as a space-efficient `npm` alternative.
+
+Clone this repository to a local folder and change to that folder.
+
 Install the required depnendencies with the command `npm install` (or `pnpm install` or `yarn`).
 
 Then to start a development server run:
