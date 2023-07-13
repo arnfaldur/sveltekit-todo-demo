@@ -26,7 +26,11 @@
 	}
 
 	function localAddTodo(e: any) {
-		updateFetch({ action: 'add', value: e.target.children['new-todo-entry'].value });
+		let value = e.target.children['new-todo-entry'].value;
+		if (value === '') {
+			return;
+		}
+		updateFetch({ action: 'add', value });
 		// clear the input field
 		e.target.children['new-todo-entry'].value = '';
 	}

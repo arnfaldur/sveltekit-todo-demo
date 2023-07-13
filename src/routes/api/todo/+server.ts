@@ -43,7 +43,7 @@ export async function POST({ request }) {
   let result = new Promise(function (resolve, _reject) {
     // serialized to ensure updates happen before result is read
     db.serialize(() => {
-      if (command.action === 'add') {
+      if (command.action === 'add' && command.value !== '') {
         addTodo(command.value);
       } else if (command.action === 'toggle') {
         toggleTodo(command.id, command.state);
